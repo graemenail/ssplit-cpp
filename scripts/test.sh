@@ -54,3 +54,11 @@ evaluate-diff "en" "wrapped" "w" ".wrapped" ${ADDITIONAL_ARGS}
 echo "Armenian"
 ADDITIONAL_ARGS=""
 evaluate-diff "hy" "paragraph" "p" "" ${ADDITIONAL_ARGS}
+
+echo "Chinese"
+ADDITIONAL_ARGS=""
+evaluate-diff "zh" "paragraph" "p" "" ${ADDITIONAL_ARGS}
+
+echo "Japanese"
+ADDITIONAL_ARGS=""
+evaluate-diff "jp" "paragraph" "p" "" ${ADDITIONAL_ARGS}
