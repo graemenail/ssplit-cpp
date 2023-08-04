@@ -138,10 +138,10 @@ operator()(string_view* rest) const {
   // Regarding \p{} below, see
   // https://www.pcre.org/current/doc/html/pcre2syntax.html#SEC5
   static Regex Chunker_RE(
-      "\\s*"                                         // whitespace
-      "[^.?!։。]*?"                                   // non alphanumeric stuff
-      "([\\p{L}\\p{Lo}\\p{N}]*)"                     // 1: alphanumeric prefix of potential EOS marker
-      "([.?!։。]++)"                                  // 2: the potential EOS marker
+      "\\s*"                                          // whitespace
+      "[^.?!։。？！]*?"                               // non alphanumeric stuff
+      "([\\p{L}\\p{Lo}\\p{N}]*)"                      // 1: alphanumeric prefix of potential EOS marker
+      "([.?!։。？！]++)"                              // 2: the potential EOS marker
       "("                                             // 3: open group for trailing matter
       "['\")\\]’”\\p{Pf}]*"                           // any "trailing matter"
       "(?:\\[[\\p{Nd}]+[\\p{Nd},\\s]*[\\p{Nd}]\\])?"  // footnote?
@@ -190,17 +190,17 @@ operator()(string_view* rest) const {
     auto following_symbol = Chunker_M[6]; // first letter or digit after whitespace
 
     // FOR DEBUGGING
-    std::cerr << "DEBUG\n" << prefix << "|"
-              << punct << "|"
-              << tail << "|"
-              << whitespace_after <<"|"
-              << inipunct << "|"
-              << following_symbol << std::endl;
+    // std::cerr << "DEBUG\n" << prefix << "|"
+    //           << punct << "|"
+    //           << tail << "|"
+    //           << whitespace_after <<"|"
+    //           << inipunct << "|"
+    //           << following_symbol << std::endl;
 
-    // whitespace not required after ideographic full stop
-    if (whitespace_after.size() == 0 && punct != "。") {
+    // whitespace not required after ideographic full widths
+    if (whitespace_after.size() == 0 && !(punct == "。" || punct == "！" || punct == "？")) {
       continue;
-    // } else if (letterother.find(following_symbol, &letterother_M, 0, PCRE2_ANCHORED) > 0) {
+    } else if (letterother.find(following_symbol, &letterother_M, 0, PCRE2_ANCHORED) > 0) {
       // Finding a letterother is not cause for a non-break; (i.e we omit continue)
     } else if (lowercase.find(following_symbol, &lowercase_M, 0, PCRE2_ANCHORED) > 0) {
       // followed by lower case
